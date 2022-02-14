@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Audio Annotator</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/css/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/audio-annotator.css">
+    <script type="text/javascript" src="/static/js/lib/jquery-2.2.3.min.js"></script>
+    <script type="text/javascript" src="/static/js/lib/materialize.min.js"></script>
+    <script type="text/javascript" src="/static/js/lib/wavesurfer.min.js"></script>
+    <script type="text/javascript" src="/static/js/lib/wavesurfer.spectrogram.min.js"></script>
+    <script type="text/javascript" src="/static/js/colormap/colormap.min.js"></script>
+    <script type="text/javascript" src="/static/js/src/message.js"></script>
+    <script type="text/javascript" src="/static/js/src/wavesurfer.regions.js"></script>
+    <script type="text/javascript" src="/static/js/src/wavesurfer.drawer.extended.js"></script>
+    <script type="text/javascript" src="/static/js/src/wavesurfer.labels.js"></script>
+    <script type="text/javascript" src="/static/js/src/hidden_image.js"></script>
+    <script type="text/javascript" src="/static/js/src/components.js"></script>
+    <script type="text/javascript" src="/static/js/src/annotation_stages.js"></script>
+    <script type="text/javascript" src="/static/js/src/main.js" defer></script>
+</head>
+
+<body>
+    <div class="row header">
+        <div class="col s12">
+            <div class="divider"></div>
+        </div>
+        <div class="col s6">
+        </div>
+        <div class="col s6 ">
+            <div class="right" style="padding-top: 10px;">
+                <a class="waves-effect waves-light modal-trigger right btn" id="trigger" href="#instructions-modal">Instructions</a>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Structure -->
+    <div id="instructions-modal" class="modal" style="max-height: 100% !important;">
+        <div class="modal-footer">
+            <a href="#!" class=" modal-action modal-close waves-effect waves-red btn-flat">Close</a>
+        </div>
+        <div class="modal-content">
+            <div id="instructions-container"></div>
+            <div class="videowrapper">
+                <iframe id="tutorial-video" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+    <div class="annotation">
+        <div class="labels"></div>
+        <div class="audio_visual"></div>
+        <div class="play_bar"></div>
+        <div class="hidden_img"></div>
+        <div id="sylable" style="margin-left: 200px;">gooo bayyyyyyyyyyyyyyyyyyyyyyya</div>
+        <div class="creation_stage_container"></div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12" style="text-align: center;">
+            <button id="ben" type="button" class="btn btn-primary btn-lg btn-block">Save Data</button>
+        </div>
+
+    </div>
+    <script>
+        var dataUrl = '/static/json/sample_data.json';
+        var postUrl = '/<post_url>'; // This is where data posts to
+    </script>
+</body>
+
+<script>
+    var stored_datas = JSON.parse(localStorage["datas"]);
+    // //alert(stored_datas);
+    const cars = stored_datas;
+    // // const cars = ["TETHF", "EEEEC", "BMVCD", "SSGGG", "FXKKK", "MDDVC", "ERKAN", "BESIR"];;
+    // document.getElementById("sylable").innerHTML = cars.join(' ');
+
+    //const cars = ["TETHF", "EEEEC", "BMVCD", "SSGGG", "FXKKK", "MDDVC", "ERKAN", "BESIR"];;
+    document.getElementById("sylable").innerHTML = cars.join(' ');
+
+    $(document).ready(function() {
+
+        var hotelName = "";
+
+
+        var element = 0;
+
+
+        $(".creation_stage_container").on('click', function(e) {
+
+
+            const checkboxes = document.querySelectorAll('tag');
+
+            var stardata = $(".start").val().split(":");
+            var enddata = $(".end").val().split(":");
+
+            // var stardata2 = stardata[1].split(".");
+            var stardata2 = parseInt(stardata[1].replace(".", ""));
+            var enddata2 = parseInt(enddata[1].replace(".", ""));
+
+
+
+            //var valueone = (checkboxes[element].textContent + "  " + $(".start").val() + "  " + $(".end").val() + "\n")
+            var valueone = (checkboxes[element].textContent.replace(/\s/g, "") + "  " + stardata2 + "  " + enddata2 + "\n")
+
+            hotelName = hotelName + valueone
+            element++;
+        });
+
+
+        $("#ben").click(function() {
+
+            downloadContent("values.txt", hotelName);
+        });
+
+    });
+
+
+    function downloadContent(name, content) {
+        var atag = document.createElement("a");
+        var file = new Blob([content], {
+            type: 'text/plain'
+        });
+        atag.href = URL.createObjectURL(file);
+        atag.download = name;
+        atag.click();
+    }
+</script>
+
+</html>
