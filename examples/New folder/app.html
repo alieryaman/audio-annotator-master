@@ -47,16 +47,6 @@
             </div>
         </div>
     </div>
-
-
-    <button type="button" onclick="zoomin()"> 
-        Zoom-In
-    </button>
-
-    <button type="button" onclick="zoomout()"> 
-        Zoom-Out
-    </button>
-
     <div class="annotation">
         <div class="labels"></div>
         <div class="audio_visual"></div>
@@ -77,47 +67,6 @@
         var dataUrl = '/static/json/sample_data.json';
         var postUrl = '/<post_url>'; // This is where data posts to
     </script>
-
-
-
-
-
-
-
-    <script type="text/javascript">
-        function zoomin() {
-            // var GFG = document.getElementById("geeks");
-            var GFG = document.getElementsByTagName("canvas")[0];
-            // var GFG = document.getElementsByClassName("audio_visual")[0];
-            var currHeight = GFG.clientHeight;
-            GFG.style.height = (currHeight + 40) + "px";
-        }
-
-        function zoomout() {
-            // var GFG = document.getElementById("geeks");
-            var GFG = document.getElementsByTagName("canvas")[0];
-            //  var GFG = document.getElementsByClassName("audio_visual")[0];
-            var currHeight = GFG.clientHeight;
-            GFG.style.height = (currHeight - 40) + "px";
-        }
-    </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </body>
 
 <script>
