@@ -175,7 +175,7 @@ StageThreeView.prototype = {
         var annotationContainer = $('<div>', {
             class: 'annotation_tags'
         });
-
+        //this my reading arry datas
         cars.forEach(function(tagName) {
             var tag = $('<button>', {
                 class: 'annotation_tag btn disabled',

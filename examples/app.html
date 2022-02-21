@@ -21,6 +21,22 @@
     <script type="text/javascript" src="/static/js/src/annotation_stages.js"></script>
     <script type="text/javascript" src="/static/js/src/main.js" defer></script>
 </head>
+<style>
+    .audio_visual wave {
+        overflow: scroll;
+    }
+    
+    .clicked {
+        background-color: yellow;
+    }
+</style>
+
+<script>
+    $(document).ready(function() {
+        var deger = $(".audio_visual").next;
+        deger.overflow = "scroll"
+    });
+</script>
 
 <body>
     <div class="row header">
@@ -47,16 +63,19 @@
             </div>
         </div>
     </div>
+    <div class="container">
 
-
-    <button type="button" onclick="zoomin()"> 
+        <button type="button" onclick="zoomin()"> 
         Zoom-In
     </button>
 
-    <button type="button" onclick="zoomout()"> 
+        <button type="button" onclick="zoomout()"> 
         Zoom-Out
     </button>
-
+        <button type="button" style="background-color: blue;" class="btn btn-primary"> 
+     <a href="index.html" target="_blank" rel="noopener noreferrer" style="color:azure" >  Reload  </a> 
+    </button>
+    </div>
     <div class="annotation">
         <div class="labels"></div>
         <div class="audio_visual"></div>
@@ -67,11 +86,15 @@
 
     </div>
 
-    <div class="row">
-        <div class="col-sm-12" style="text-align: center;">
-            <button id="ben" type="button" class="btn btn-primary btn-lg btn-block">Save Data</button>
-        </div>
 
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12" style="text-align: center;">
+                <button id="ben" type="button" class="btn btn-primary btn-lg btn-block">Save Data</button>
+            </div>
+
+        </div>
     </div>
     <script>
         var dataUrl = '/static/json/sample_data.json';
@@ -86,34 +109,31 @@
 
     <script type="text/javascript">
         function zoomin() {
-            // var GFG = document.getElementById("geeks");
+            //var GFG = document.getElementById("Tshirtsrc");
             var GFG = document.getElementsByTagName("canvas")[0];
-            // var GFG = document.getElementsByClassName("audio_visual")[0];
+            var currWidth = GFG.clientWidth;
+            console.log('currWidth', currWidth);
             var currHeight = GFG.clientHeight;
-            GFG.style.height = (currHeight + 40) + "px";
+            console.log('currHeight', currHeight);
+            GFG.style.width = (currWidth + 20) + "px";
+            GFG.style.height = (currHeight + 20) + "px";
+            console.log('gfg width', GFG.style.width);
+            console.log('gfg height', GFG.style.height);
+            return false;
+
         }
 
         function zoomout() {
-            // var GFG = document.getElementById("geeks");
+            // var GFG = document.getElementById("Tshirtsrc");
             var GFG = document.getElementsByTagName("canvas")[0];
-            //  var GFG = document.getElementsByClassName("audio_visual")[0];
+
+            var currWidth = GFG.clientWidth;
             var currHeight = GFG.clientHeight;
-            GFG.style.height = (currHeight - 40) + "px";
+            GFG.style.width = (currWidth - 20) + "px";
+            GFG.style.height = (currHeight - 20) + "px";
+
         }
     </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -122,12 +142,11 @@
 
 <script>
     var stored_datas = JSON.parse(localStorage["datas"]);
-    // //alert(stored_datas);
-    const cars = stored_datas;
-    // // const cars = ["TETHF", "EEEEC", "BMVCD", "SSGGG", "FXKKK", "MDDVC", "ERKAN", "BESIR"];;
-    // document.getElementById("sylable").innerHTML = cars.join(' ');
+    var aodiofilename = localStorage["aodiofilename"];
 
-    //const cars = ["TETHF", "EEEEC", "BMVCD", "SSGGG", "FXKKK", "MDDVC", "ERKAN", "BESIR"];;
+    const cars = stored_datas;
+
+
     document.getElementById("sylable").innerHTML = cars.join(' ');
 
     $(document).ready(function() {
@@ -137,8 +156,10 @@
 
         var element = 0;
 
-
+        var endtimeof = [];
+        var i = 0;
         $(".creation_stage_container").on('click', function(e) {
+
 
 
             const checkboxes = document.querySelectorAll('tag');
@@ -150,13 +171,22 @@
             var stardata2 = parseInt(stardata[1].replace(".", ""));
             var enddata2 = parseInt(enddata[1].replace(".", ""));
 
+            endtimeof.push(enddata2);
 
 
             //var valueone = (checkboxes[element].textContent + "  " + $(".start").val() + "  " + $(".end").val() + "\n")
+            // var valueone = (checkboxes[element].textContent.replace(/\s/g, "") + "  " + stardata2 + "  " + enddata2 + "\n")
+            if (endtimeof.length > 1) {
+                stardata2 = endtimeof[i - 1];
+
+            }
+            i++;
+            alert(checkboxes[0].tagName);
             var valueone = (checkboxes[element].textContent.replace(/\s/g, "") + "  " + stardata2 + "  " + enddata2 + "\n")
 
             hotelName = hotelName + valueone
             element++;
+
         });
 
 
@@ -178,5 +208,18 @@
         atag.click();
     }
 </script>
+
+
+
+<script>
+    // $(document).ready(function() {
+    //     $("button").click(function() {
+    //         alert("The paragraph was clicked.");
+    //     });
+    // });
+</script>
+
+
+
 
 </html>

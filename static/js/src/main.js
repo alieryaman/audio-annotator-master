@@ -80,7 +80,7 @@ Annotator.prototype = {
         var my = this;
 
         // function that moves the vertical progress bar to the current time in the audio clip
-        var updateProgressBar = function () {
+        var updateProgressBar = function() {
             var progress = my.wavesurfer.getCurrentTime() / my.wavesurfer.getDuration();
             my.wavesurfer.seekTo(progress);
         };
@@ -88,12 +88,12 @@ Annotator.prototype = {
         // Update vertical progress bar to the currentTime when the sound clip is 
         // finished or paused since it is only updated on audioprocess
         this.wavesurfer.on('pause', updateProgressBar);
-        this.wavesurfer.on('finish', updateProgressBar);    
+        this.wavesurfer.on('finish', updateProgressBar);
 
         // When a new sound file is loaded into the wavesurfer update the  play bar, update the 
         // annotation stages back to stage 1, update when the user started the task, update the workflow buttons.
         // Also if the user is suppose to get hidden image feedback, append that component to the page
-        this.wavesurfer.on('ready', function () {
+        this.wavesurfer.on('ready', function() {
             my.playBar.update();
             my.stages.updateStage(1);
             my.updateTaskTime();
@@ -103,7 +103,7 @@ Annotator.prototype = {
             }
         });
 
-        this.wavesurfer.on('click', function (e) {
+        this.wavesurfer.on('click', function(e) {
             my.stages.clickDeselectCurrentRegion();
         });
     },
@@ -147,10 +147,10 @@ Annotator.prototype = {
             // add instructions
             var instructionsContainer = $('#instructions-container');
             instructionsContainer.empty();
-            if (typeof instructions !== "undefined"){
+            if (typeof instructions !== "undefined") {
                 $('.modal-trigger').leanModal();
-                instructions.forEach(function (instruction, index) {
-                    if (index==0) {
+                instructions.forEach(function(instruction, index) {
+                    if (index == 0) {
                         // first instruction is the header
                         var instr = $('<h4>', {
                             html: instruction
@@ -159,7 +159,7 @@ Annotator.prototype = {
                         var instr = $('<h6>', {
                             "class": "instruction",
                             html: instruction
-                        });                    
+                        });
                     }
                     instructionsContainer.append(instr);
                 });
@@ -167,9 +167,7 @@ Annotator.prototype = {
                     $('#instructions-modal').openModal();
                     my.instructionsViewed = true;
                 }
-            }
-            else
-            {
+            } else {
                 $('#instructions-container').hide();
                 $('#trigger').hide();
             }
@@ -177,19 +175,22 @@ Annotator.prototype = {
             // Update the visualization type and the feedback type and load in the new audio clip
             my.wavesurfer.params.visualization = my.currentTask.visualization; // invisible, spectrogram, waveform
             my.wavesurfer.params.feedback = my.currentTask.feedback; // hiddenImage, silent, notify, none 
-            my.wavesurfer.load(my.currentTask.url);
+            // alert("merhaba beşir" + my.currentTask.url);
+            //my.wavesurfer.load(my.currentTask.url);
+
+            my.wavesurfer.load("/static/wav/" + aodiofilename);
         };
 
         if (this.currentTask.feedback !== 'none') {
             // If the current task gives the user feedback, load the tasks solutions and then update
             // interface components
             $.getJSON(this.currentTask.annotationSolutionsUrl)
-            .done(function(data) {
-                mainUpdate(data);
-            })
-            .fail(function() {
-                alert('Error: Unable to retrieve annotation solution set');
-            });
+                .done(function(data) {
+                    mainUpdate(data);
+                })
+                .fail(function() {
+                    alert('Error: Unable to retrieve annotation solution set');
+                });
         } else {
             // If not, there is no need to make an additional request. Just update task specific data right away
             mainUpdate({});
@@ -200,10 +201,10 @@ Annotator.prototype = {
     loadNextTask: function() {
         var my = this;
         $.getJSON(dataUrl)
-        .done(function(data) {
-            my.currentTask = data.task;
-            my.update();
-        });
+            .done(function(data) {
+                my.currentTask = data.task;
+                my.update();
+            });
     },
 
     // Collect data about users annotations and submit it to the backend
@@ -245,28 +246,28 @@ Annotator.prototype = {
     },
 
     // Make POST request, passing back the content data. On success load in the next task
-    post: function (content) {
+    post: function(content) {
         var my = this;
         $.ajax({
-            type: 'POST',
-            url: $.getJSON(postUrl),
-            contentType: 'application/json',
-            data: JSON.stringify(content)
-        })
-        .done(function(data) {
-            // If the last task had a hiddenImage component, remove it
-            if (my.currentTask.feedback === 'hiddenImage') {
-                my.hiddenImage.remove();
-            }
-            my.loadNextTask();
-        })
-        .fail(function() {
-            alert('Error: Unable to Submit Annotations');
-        })
-        .always(function() {
-            // No longer sending response
-            my.sendingResponse = false;
-        });
+                type: 'POST',
+                url: $.getJSON(postUrl),
+                contentType: 'application/json',
+                data: JSON.stringify(content)
+            })
+            .done(function(data) {
+                // If the last task had a hiddenImage component, remove it
+                if (my.currentTask.feedback === 'hiddenImage') {
+                    my.hiddenImage.remove();
+                }
+                my.loadNextTask();
+            })
+            .fail(function() {
+                alert('Error: Unable to Submit Annotations');
+            })
+            .always(function() {
+                // No longer sending response
+                my.sendingResponse = false;
+            });
     }
 
 };

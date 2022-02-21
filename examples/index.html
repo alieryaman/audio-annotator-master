@@ -35,7 +35,7 @@
         <div class="container mt-5">
             <div class="row">
                 <div class="col-sm-4">
-
+                    <input type="file" id="myFile" multiple size="50" onchange="myFunction()">
                 </div>
                 <div class="col-sm-4">
 
@@ -63,8 +63,11 @@
 
     </body>
     <script>
+        localStorage.removeItem("datas");
+        localStorage.removeItem("aodiofilename");
         document.getElementById('file').onchange = function() {
-            localStorage.removeItem("datas");
+
+
             var file = this.files[0];
 
             var reader = new FileReader();
@@ -90,6 +93,49 @@
 
         };
     </script>
+
+
+
+
+
+    <script>
+        function myFunction() {
+            var x = document.getElementById("myFile");
+            var txt = "";
+            if ('files' in x) {
+                if (x.files.length == 0) {
+                    txt = "Select one or more files.";
+                } else {
+                    for (var i = 0; i < x.files.length; i++) {
+                        txt += "<br><strong>" + (i + 1) + ". file</strong><br>";
+                        var file = x.files[i];
+                        if ('name' in file) {
+                            txt += "name: " + file.name + "<br>";
+                            alert(file.name);
+                            localStorage["aodiofilename"] = file.name;
+                            break;
+                        }
+
+                    }
+                }
+            }
+        }
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 </html>
